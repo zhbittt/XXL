@@ -1,0 +1,19 @@
+{% load  staticfiles %}
+{% load my_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>列表页面</h1>
+        {% show_list data_list=data_list header_list=header_list  %}
+    </div>
+
+
+</body>
+</html>
