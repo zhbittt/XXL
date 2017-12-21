@@ -1,0 +1,29 @@
+{% load  staticfiles %}
+{% load my_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>列表页面</h1>
+        {% if show_add_btn %}
+            <div class="col-md-offset-11  text-right"><a href="{{ add_url }}"><button type="button" class="btn btn-primary">添加</button></a></div>
+        {% endif %}
+        {% show_list data_list=data_list header_list=header_list  %}
+        <nav aria-label="Page navigation" class="text-center">
+            <ul class="pagination">
+                {% for page_html in page_html_list %}
+                    {{ page_html|safe }}
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+
+
+</body>
+</html>

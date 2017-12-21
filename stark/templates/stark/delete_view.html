@@ -1,0 +1,19 @@
+{% load staticfiles %}
+{% load my_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form_input.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>添加页面</h1>
+    {% get_url url=request.path form=form %}
+
+</div>
+
+</body>
+</html>
