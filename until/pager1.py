@@ -1,3 +1,4 @@
+import  copy
 class Pagination(object):
     '''
     分页
@@ -23,7 +24,16 @@ class Pagination(object):
                 </ul>
             </nav>
     '''
-    def __init__(self,current_page,total_count,base_url,max_pager_count=7,per_page_count=10):
+    def __init__(self,config,total_count,base_url,max_pager_count=7,per_page_count=10):
+        self.request = config.request
+        current_page =self.request.GET.get("page","")
+        params = copy.deepcopy(self.request.GET)
+        params.mutable=True
+        print("pager1--------params",params)
+        if current_page:
+            params.pop("page")
+        print("pager1--------params.urlencode()==",params.urlencode())
+        self.params_urlencode = params.urlencode()
         try:
             current_page = int(current_page)
         except Exception as e:
@@ -77,12 +87,12 @@ class Pagination(object):
         page_html_list = []
 
         #首页
-        page_html_list.append('<li><a href="%s?page=1" aria-label="Previous"><span aria-hidden="true">首页</span></a></li>'%self.base_url)
+        page_html_list.append('<li><a href="%s?page=1&%s" aria-label="Previous"><span aria-hidden="true">首页</span></a></li>'%(self.base_url,self.params_urlencode))
         #上一页
         if self.current_page == pager_start:
             left='<li><span><span aria-hidden="true">&laquo;</span></span></li>'
         else:
-            left = '<li><a href="%s?page=%s" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>' % (self.base_url, self.current_page-1)
+            left = '<li><a href="%s?page=%s&%s" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>' % (self.base_url, self.current_page-1,self.params_urlencode)
         page_html_list.append(left)
 
         #页面
@@ -90,16 +100,16 @@ class Pagination(object):
             if self.current_page == x:
                 temp = '<li class="active"><span><span aria-hidden="true">%s</span></span></li>'%x
             else:
-                temp = '<li><a href="%s?page=%s" aria-label="Previous"><span aria-hidden="true">%s</span></a></li>'%(self.base_url,x,x)
+                temp = '<li><a href="%s?page=%s&%s" aria-label="Previous"><span aria-hidden="true">%s</span></a></li>'%(self.base_url,x,self.params_urlencode,x)
             page_html_list.append(temp)
 
         #下一页
         if self.current_page == pager_end:
             right='<li><span><span aria-hidden="true">&raquo;</span></span></li>'
         else:
-            right = '<li><a href="%s?page=%s" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>' % (self.base_url, self.current_page+1)
+            right = '<li><a href="%s?page=%s&%s" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>' % (self.base_url, self.current_page+1,self.params_urlencode)
         page_html_list.append(right)
         #尾页
-        page_html_list.append('<li><a href="%s?page=%s" aria-label="Previous"><span aria-hidden="true">尾页</span></a></li>' %(self.base_url,self.max_page_num))
+        page_html_list.append('<li><a href="%s?page=%s&%s" aria-label="Previous"><span aria-hidden="true">尾页</span></a></li>' %(self.base_url,self.max_page_num,self.params_urlencode))
         return page_html_list
 

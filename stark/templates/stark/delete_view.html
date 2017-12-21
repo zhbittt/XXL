@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load my_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +9,17 @@
 </head>
 <body>
 <div class="container">
-    <h1>添加页面</h1>
-    {% get_url url=request.path form=form %}
-
+    <h1>删除页面</h1>
+    <div class="col-md-offset-4 col-md-3">
+        <h3>确定要删除吗？</h3>
+        <form method="post" >
+            {% csrf_token %}
+            <input class="btn btn-danger" type="submit" value="确定">
+        </form>
+    </div>
 </div>
+
 
 </body>
 </html>
+

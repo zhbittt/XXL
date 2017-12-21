@@ -1,10 +1,40 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'dist/css/bootstrap.min.css' %}">
+    <style>
+        .a li {
+            display: inline-block;
+            padding: 5px;
+            margin: 0 5px;
+            border: 1px solid #2b669a;
+        }
+
+        .active {
+            background-color: #2e6da4;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-$END$
+
+<ul>
+    {% for con in context_list %}
+        <li>{{ con }}</li>
+    {% endfor %}
+</ul>
+
+<nav aria-label="...">
+    <ul class="pagination">
+        {% for page_html in page_html_list %}
+            {{ page_html|safe }}
+        {% endfor %}
+    </ul>
+</nav>
+
+
 </body>
 </html>

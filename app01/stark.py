@@ -1,27 +1,54 @@
 from app01 import models
 from stark.service import v1
+from django.conf.urls import url
+from django.http import HttpResponse
 from django.utils.safestring import mark_safe
 class AuthorConfig(v1.StarkConfig):
 
-    def check_box(self,obj=None,is_header=False):
-        if is_header:
-            return "选择"
-        return mark_safe('<input type="checkbox">')
+    #自定义添加额外的url
+    def extra_url(self):
+        url_list=[
+            url(r'^xxxx/',self.fun),
+        ]
+        return url_list
+    #额外添加的url，对应的函数
+    def fun(self):
+        return HttpResponse("额外添加的url")
 
-    def edit(self,obj=None,is_header=False):
-        # from app01 import models
-        # aaaa=models.Author._meta.fields
-        # print(aaaa)
-        # for x in aaaa:
-        #     print("aaaaaaaaaaaaaaaa",x.name)
 
-        if is_header:
-            return "操作"
-        return mark_safe('<a href="/stark/%s/%s/%s/change/">编辑</a>'%(self.model_class._meta.app_label,self.model_class._meta.model_name,obj.id))
-    list_display = [check_box, 'id', "username", "password",edit]
+    #自定义查询字段
+    list_display = [ 'id', "username", "password"]
+
+    #有无添加按钮的权限
+    # show_add_btn = True
+
+    #自定义从那个字段搜索
+    show_query_field=True
+    query_field = ["username__contains","password__contains"]
+
+    show_actions=True
+
+    #自定义actions
+    def multi_del(self,requset):
+        pk_list = requset.POST.getlist('pk')
+        self.model_class.objects.filter(pk__in=pk_list).delete()
+    multi_del.short_desc='批量删除'
+
+    def multi_init(self, requset):
+        pk_list = requset.POST.getlist('pk')
+    multi_init.short_desc='初始化'
+
+    list_acions=[multi_del,multi_init]
+
+    comb_filter = [
+        v1.FilterOption('username',),
+        v1.FilterOption('password',),
+    ]
+
+
 
 class BookConfig(v1.StarkConfig):
-    list_display = ['id',"title","contentt","publish_time","author_id"]
+    list_display = ['id',"title","content","publish_time","author"]
 
 class PublishConfig(v1.StarkConfig):
     list_display = ["id","title","addr"]
